@@ -1,6 +1,5 @@
 import './Topbar.scss';
 import gearIcon from '../assets/gear.svg';
-// import reactLogo from './assets/react.svg';
 
 const Topbar = () => {
 	return (

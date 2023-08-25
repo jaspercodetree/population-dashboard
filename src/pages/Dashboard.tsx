@@ -1,6 +1,8 @@
-import BarChart from '../components/BarChart';
 import './Dashboard.scss';
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import BarChart from '../components/BarChart';
+import PieChart from '../components/PieChart';
 
 const Dashboard = () => {
 	const [formData, setFormData] = useState({
@@ -8,6 +10,7 @@ const Dashboard = () => {
 		city: '',
 		district: '',
 	});
+	const [formDataView, setFormDataView] = useState({});
 	const [cityList, setCityList] = useState([]);
 
 	const [districtList, setDistrictList] = useState([]);
@@ -16,6 +19,9 @@ const Dashboard = () => {
 	console.log(populationData);
 
 	const [chartData, setChartData] = useState({});
+
+	const navigate = useNavigate();
+	const params = useParams();
 
 	const yearList = [];
 	for (let year = 106; year <= 111; year++) {
@@ -43,16 +49,22 @@ const Dashboard = () => {
 			// console.log(uniqueCity);
 
 			setCityList(uniqueCity);
+
+			return data;
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	const handleSubmit = () => {
-		console.log('submit');
+	const handleSubmit = (response, userData) => {
+		const apiData = response || populationData;
+		const city = userData ? userData.city : formData.city;
+		const district = userData ? userData.district : formData.district;
 
-		const statisticsData = populationData.responseData.filter((item) => {
-			return item.site_id.includes(formData.city + formData.district);
+		console.log(apiData);
+
+		const statisticsData = apiData.responseData.filter((item) => {
+			return item.site_id.includes(city + district);
 		});
 
 		const aggregatedData = {
@@ -96,10 +108,20 @@ const Dashboard = () => {
 		console.log(statisticsData);
 		console.log(aggregatedData);
 
-		setChartData({
-			formData: formData,
-			aggregatedData: aggregatedData,
-		});
+		setChartData(aggregatedData);
+
+		if (formData.year && formData.city && formData.district) {
+			navigate(
+				'/' +
+					formData.year +
+					'/' +
+					formData.city +
+					'/' +
+					formData.district
+			);
+
+			setFormDataView({ ...formData });
+		}
 	};
 
 	const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -107,26 +129,67 @@ const Dashboard = () => {
 		getData(e.target.value);
 	};
 
-	const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setFormData({ ...formData, city: e.target.value, district: '' });
+	const composeDistrictList = (city: string, response) => {
+		const apiData = response || populationData;
 
-		const districtData = populationData.responseData
-			.filter((item) => item.site_id.includes(e.target.value))
+		const districtData = apiData.responseData
+			.filter((item) => item.site_id.includes(city))
 			.map((item: string) => {
 				return item.site_id.slice(3);
 			});
 		const uniqueDistrict = [...new Set(districtData)];
 		setDistrictList(uniqueDistrict);
 	};
+
+	const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setFormData({ ...formData, city: e.target.value, district: '' });
+
+		composeDistrictList(e.target.value);
+	};
 	console.log(formData);
+	console.log(formDataView);
 
 	const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setFormData({ ...formData, district: e.target.value });
 	};
 
 	useEffect(() => {
-		getData(formData.year);
+		const fetchData = async (year: string) => {
+			const response = await getData(year);
+
+			if (params.city && params.district) {
+				setFormData({
+					year: year,
+					city: params.city,
+					district: params.district,
+				});
+				setFormDataView({
+					year: year,
+					city: params.city,
+					district: params.district,
+				});
+
+				composeDistrictList(params.city, response);
+
+				handleSubmit(response, {
+					year: year,
+					city: params.city,
+					district: params.district,
+				});
+			}
+		};
+
+		fetchData(params.year || formData.year);
 	}, []);
+
+	const location = useLocation();
+	console.log(params.city);
+
+	const [pathname, setPathname] = useState(location.pathname);
+	// 在這裡您可以使用 location.pathname、location.search 等獲取網址資訊
+	useEffect(() => {
+		console.log(decodeURIComponent(pathname));
+	}, [pathname]);
 
 	return (
 		<div className="dashboardContainer">
@@ -171,6 +234,7 @@ const Dashboard = () => {
 						className="selectGroup"
 						value={formData.district}
 						onChange={handleDistrictChange}
+						// disabled={formData.city === ''}
 					>
 						<option value="" disabled>
 							請先選擇 縣/市
@@ -183,7 +247,7 @@ const Dashboard = () => {
 					</select>
 					<button
 						id="submitBtn"
-						onClick={handleSubmit}
+						onClick={() => handleSubmit('')}
 						disabled={
 							!formData.year ||
 							!formData.city ||
@@ -203,7 +267,9 @@ const Dashboard = () => {
 
 				{Object.keys(chartData).length !== 0 && (
 					<div className="chartContainer">
+						<h1 className="chartTitle">{`${formDataView.year}年 ${formDataView.city}${formDataView.district}`}</h1>
 						<BarChart chartData={chartData} />
+						<PieChart chartData={chartData} />
 					</div>
 				)}
 			</div>

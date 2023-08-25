@@ -1,12 +1,29 @@
+import { Routes, Route } from 'react-router-dom';
 import './App.scss';
-import Topbar from './components/Topbar';
 import Dashboard from './pages/Dashboard';
+import Layout from './Layout/Layout';
 
 function App() {
 	return (
 		<>
-			<Topbar />
-			<Dashboard />
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<Layout>
+							<Dashboard />
+						</Layout>
+					}
+				/>
+				<Route
+					path="/:year/:city/:district"
+					element={
+						<Layout>
+							<Dashboard />
+						</Layout>
+					}
+				/>
+			</Routes>
 		</>
 	);
 }
