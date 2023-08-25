@@ -1,0 +1,39 @@
+/* Color */
+:root {
+	--primary: #651fff;
+	--secondary: #b388ff;
+	--light: #fff;
+	--dark: #000;
+	--grey1: #8b8b8b;
+	--grey2: #b6b6b6;
+
+	font-family: Noto Sans TC, Inter, system-ui, Avenir, Helvetica, Arial,
+		sans-serif;
+}
+
+body {
+	color: var(--dark);
+	margin: 0;
+
+	.selectGroup {
+		margin-inline: 6px;
+		height: 40px;
+		border: 1px solid var(--grey2);
+		border-radius: 4px;
+		padding: 10px;
+		outline: none;
+		cursor: pointer;
+
+		background-image: linear-gradient(
+				45deg,
+				transparent 50%,
+				var(--grey2) 50%
+			),
+			linear-gradient(135deg, var(--grey2) 50%, transparent 50%) !important;
+		background-position: calc(100% - 14px) 16px, calc(100% - 8px) 16px;
+		background-size: 6px 6px, 6px 6px;
+		background-repeat: no-repeat;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+	}
+}
