@@ -148,15 +148,15 @@ const BarChart = ({ chartData }: { chartData: BarChartDataItem }) => {
 				{
 					type: 'column',
 					data: [
-						chartData.household_ordinary_m,
-						chartData.household_single_m,
+						parseFloat(chartData.household_ordinary_m || '0'),
+						parseFloat(chartData.household_single_m || '0'),
 					],
 				},
 				{
 					type: 'column',
 					data: [
-						chartData.household_ordinary_f,
-						chartData.household_single_f,
+						parseFloat(chartData.household_ordinary_f || '0'),
+						parseFloat(chartData.household_single_f || '0'),
 					],
 				},
 			],

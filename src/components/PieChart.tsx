@@ -77,14 +77,20 @@ const PieChart = ({ chartData }: { chartData: PieChartProps }) => {
 					data: [
 						{
 							name: '共同生活',
-							y: parseInt(chartData.household_ordinary_total),
+							y: parseInt(
+								chartData.household_ordinary_total || '0',
+								10
+							),
 							color: '#626EB2',
 							selected: true,
 						},
 						{
 							name: '獨立生活',
 							color: '#A3B1FF',
-							y: parseInt(chartData.household_single_total),
+							y: parseInt(
+								chartData.household_single_total || '0',
+								10
+							),
 						},
 					],
 				},
