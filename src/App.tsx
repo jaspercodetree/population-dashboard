@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-import './App.scss';
 import Dashboard from './pages/Dashboard';
 import Layout from './Layout/Layout';
+import NotFound from './pages/NotFound';
+import ErrorPage from './pages/ErrorPage';
 
 function App() {
 	return (
@@ -20,6 +21,25 @@ function App() {
 					element={
 						<Layout>
 							<Dashboard />
+						</Layout>
+					}
+				/>
+
+				{/* 找不到網頁 */}
+				<Route
+					path="*"
+					element={
+						<Layout>
+							<NotFound />
+						</Layout>
+					}
+				/>
+				{/* 錯誤提示網頁  */}
+				<Route
+					path="/error"
+					element={
+						<Layout>
+							<ErrorPage />
 						</Layout>
 					}
 				/>

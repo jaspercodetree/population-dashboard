@@ -1,0 +1,56 @@
+.selectGroupWrap {
+	position: relative;
+
+	.selectGroup {
+		margin-inline: 6px;
+		height: 40px;
+		border: 1px solid var(--grey2);
+		border-radius: 4px;
+		padding: 10px;
+		outline: none;
+		cursor: pointer;
+
+		background-image: linear-gradient(45deg, transparent 50%, #797979 50%),
+			linear-gradient(135deg, #797979 50%, transparent 50%) !important;
+		background-position: calc(100% - 14px) 16px, calc(100% - 8px) 16px;
+		background-size: 6px 6px, 6px 6px;
+		background-repeat: no-repeat;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+	}
+
+	label {
+		position: absolute;
+		top: -9px;
+		left: 16px;
+		font-size: 12px;
+		font-weight: 300;
+		background-color: var(--light);
+		padding-inline: 4px;
+	}
+
+	select:focus {
+		border: 2px solid var(--primary);
+
+		& + label {
+			color: var(--primary);
+			font-weight: 500;
+		}
+	}
+}
+
+/* 手機版 */
+@media (max-width: 767px) {
+	.selectGroupWrap {
+		width: 100%;
+
+		.selectGroup {
+			margin: 0 0 16px 0;
+		}
+
+		#citySelect,
+		#districtSelect {
+			width: 100%;
+		}
+	}
+}

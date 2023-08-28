@@ -1,6 +1,11 @@
+import { ReactNode } from 'react';
 import Topbar from '../components/Topbar';
 
-const Layout = ({ children }) => {
+interface LayoutProps {
+	children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
 	return (
 		<>
 			<Topbar />

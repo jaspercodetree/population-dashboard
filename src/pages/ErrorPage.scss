@@ -1,0 +1,17 @@
+.errorPageContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: calc(100vh - 56px);
+
+	button {
+		background-color: var(--secondary);
+		color: var(--light);
+		border: none;
+		border-radius: 4px;
+		padding: 8px 16px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+}
